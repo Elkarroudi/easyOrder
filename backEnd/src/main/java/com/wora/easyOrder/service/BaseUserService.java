@@ -1,13 +1,13 @@
 package com.wora.easyOrder.service;
 
 import com.wora.easyOrder.mapper.GenericMapper;
-import com.wora.easyOrder.repository.base.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BaseUserService<T, REQ, RES> extends GenericService<T, REQ, RES>  {
 
-    UserRepository<T, RES> getRepository();
+    JpaRepository<T, String> getRepository();
     GenericMapper<T, REQ, RES> getMapper();
 
     default Page<RES> findAll(Pageable pageable) {
@@ -16,7 +16,7 @@ public interface BaseUserService<T, REQ, RES> extends GenericService<T, REQ, RES
     };
 
     default T findByEmail(String email) {
-        return getRepository().findByEmail(email);
+        return null;
     };
 
     default RES findByEmailAndMapToResponseDTO(String email) {

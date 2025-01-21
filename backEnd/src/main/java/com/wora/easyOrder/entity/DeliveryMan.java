@@ -1,7 +1,7 @@
 package com.wora.easyOrder.entity;
 
 import com.wora.easyOrder.entity.base.BaseUser;
-import com.wora.easyOrder.entity.projectEnum.VehicleType;
+import com.wora.easyOrder.enums.VehicleType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;

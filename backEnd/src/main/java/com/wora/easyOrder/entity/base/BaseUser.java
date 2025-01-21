@@ -1,53 +1,43 @@
 package com.wora.easyOrder.entity.base;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@SuperBuilder
 @MappedSuperclass
-@AllArgsConstructor
-@NoArgsConstructor
 public abstract class BaseUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     protected String id;
 
-    @Column(
-            name = "name",
-            nullable = false
-    )
+    @Column(nullable = false)
     protected String name;
 
-    @Column(
-            name = "name",
-            nullable = false
-    )
+    @Column(nullable = false, unique = true)
     protected String email;
 
-    @Column(
-            name = "name",
-            nullable = false
-    )
+    @Column(nullable = false)
     protected String phone;
 
-    @Column(
-            name = "name",
-            nullable = false
-    )
+    @Column(nullable = false)
     protected String password;
 
     @CreationTimestamp
     @Column(
-            name = "createdAt",
+            name = "created_at",
             updatable = false,
             nullable = false
     )
     private LocalDateTime createdAt;
 
+    protected BaseUser() {
+    }
 }

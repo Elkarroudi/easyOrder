@@ -16,8 +16,7 @@ public interface BaseUserService<T, REQ, RES> extends GenericService<T, REQ, RES
     };
 
     default T findByEmail(String email) {
-        return getRepository().findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Entity not found with email : " + email));
+        return getRepository().findByEmail(email);
     };
 
     default RES findByEmailAndMapToResponseDTO(String email) {

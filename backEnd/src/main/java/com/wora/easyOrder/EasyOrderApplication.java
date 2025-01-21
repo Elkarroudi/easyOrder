@@ -8,6 +8,7 @@ public class EasyOrderApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EasyOrderApplication.class, args);
+		System.out.println("l3arbi");
 	}
 
 }

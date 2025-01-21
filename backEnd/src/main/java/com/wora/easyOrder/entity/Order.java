@@ -1,5 +1,6 @@
 package com.example.easyorder.entity;
 
+import com.wora.easyOrder.entity.Customer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

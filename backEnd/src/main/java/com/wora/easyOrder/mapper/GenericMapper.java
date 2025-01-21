@@ -8,6 +8,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface GenericMapper<T, REQ, RES> {
 
     T toEntity(REQ req);
+
     RES toResponseDTO(T entity);
 
     @BeanMapping(

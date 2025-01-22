@@ -1,10 +1,12 @@
 package com.wora.easyOrder.service.implementation;
 
 import com.wora.easyOrder.entity.Order;
+import com.wora.easyOrder.enums.OrderStatus;
 import com.wora.easyOrder.repository.OrderRepository;
 import com.wora.easyOrder.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
         
         order.setTotalAmount(totalAmount);
         order.setOrderDate(LocalDateTime.now());
-        order.setStatus("PENDING");
+        order.setStatus(OrderStatus.IN_PREPARATION);
         
         // Associer la commande à chaque article de commande
         order.getOrderItems().forEach(item -> item.setOrder(order));
@@ -56,27 +58,29 @@ public class OrderServiceImpl implements OrderService {
     }
     
     @Override
-    public Order updateOrderStatus(Long id, String status) {
-        if (status == null || status.trim().isEmpty()) {
-            throw new IllegalArgumentException("Le statut ne peut pas être vide");
+    public Order updateOrderStatus(Long id, OrderStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Le statut ne peut pas être null");
         }
         
         Order order = getOrderById(id);
+        OrderStatus currentStatus = order.getStatus();
         
-        // Validation du statut
-        switch (status.toUpperCase()) {
-            case "PENDING":
-            case "CONFIRMED":
-            case "PREPARING":
-            case "READY":
-            case "DELIVERED":
-            case "CANCELLED":
-                order.setStatus(status.toUpperCase());
-                break;
-            default:
-                throw new IllegalArgumentException("Statut non valide: " + status);
+        // Validation des transitions de statut
+        if (currentStatus == OrderStatus.CANCELLED) {
+            throw new IllegalStateException("Impossible de modifier le statut d'une commande annulée");
         }
         
+        if (currentStatus == OrderStatus.SERVED && status != OrderStatus.CANCELLED) {
+            throw new IllegalStateException("Une commande servie ne peut être que annulée");
+        }
+        
+        // Validation de l'ordre logique des statuts
+        if (currentStatus == OrderStatus.BEING_DELIVERED && status == OrderStatus.IN_PREPARATION) {
+            throw new IllegalStateException("Impossible de remettre une commande en préparation une fois en livraison");
+        }
+        
+        order.setStatus(status);
         return orderRepository.save(order);
     }
     
@@ -84,8 +88,8 @@ public class OrderServiceImpl implements OrderService {
     public void deleteOrder(Long id) {
         Order order = getOrderById(id);
         // Vérifier si la commande peut être supprimée
-        if (!"PENDING".equals(order.getStatus()) && !"CANCELLED".equals(order.getStatus())) {
-            throw new IllegalStateException("Seules les commandes en attente ou annulées peuvent être supprimées");
+        if (order.getStatus() != OrderStatus.IN_PREPARATION) {
+            throw new IllegalStateException("Seules les commandes en préparation peuvent être supprimées");
         }
         orderRepository.deleteById(id);
     }
@@ -102,10 +106,10 @@ public class OrderServiceImpl implements OrderService {
     }
     
     @Override
-    public List<Order> getOrdersByStatus(String status) {
-        if (status == null || status.trim().isEmpty()) {
-            throw new IllegalArgumentException("Le statut ne peut pas être vide");
+    public List<Order> getOrdersByStatus(OrderStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Le statut ne peut pas être null");
         }
-        return orderRepository.findByStatus(status.toUpperCase());
+        return orderRepository.findByStatus(status);
     }
 }

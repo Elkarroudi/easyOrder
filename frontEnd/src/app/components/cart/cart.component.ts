@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BehaviorSubject } from 'rxjs';
 import { CartItem, DeliveryPerson } from '../../models/cart.model';
@@ -131,13 +132,15 @@ import { CartItem, DeliveryPerson } from '../../models/cart.model';
   `]
 })
 export class CartComponent {
+  constructor(private router: Router) {}
+
   private cartState = new BehaviorSubject<CartItem[]>([
     {
       id: 1,
       name: 'Berry Mojito',
       description: 'Homemade berry syrup',
       price: 10,
-      image: 'assets/images/berry-mojito.jpg',
+      image: 'assets/images/BerryMojito.jpg',
       quantity: 1
     },
     {
@@ -145,7 +148,7 @@ export class CartComponent {
       name: 'Cold noodles',
       description: 'Korean cold noodles soup',
       price: 10,
-      image: 'assets/images/cold-noodles.jpg',
+      image: 'assets/images/ColdNoodles.jpg',
       quantity: 1
     },
     {
@@ -153,7 +156,7 @@ export class CartComponent {
       name: 'Beefstake',
       description: 'USDA beefstake',
       price: 100,
-      image: 'assets/images/beefstake.jpg',
+      image: 'assets/images/Beefstake.jpg',
       quantity: 1
     }
   ]);
@@ -171,7 +174,7 @@ export class CartComponent {
     name: 'Mary Nguyen',
     phone: '0987657992',
     email: 'mary.nguyen@gmail.com',
-    image: 'assets/images/delivery-person.jpg'
+    image: 'assets/images/MaryNguyen.jpg'
   };
 
   totalAmount = computed(() => 
@@ -205,5 +208,8 @@ export class CartComponent {
       deliveryPerson: this.isDelivery() ? this.deliveryPerson : null
     };
     console.log('Processing checkout:', orderData);
+    
+    // Redirection vers la page de suivi
+    this.router.navigate(['/order-tracking']);
   }
 }

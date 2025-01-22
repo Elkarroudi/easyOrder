@@ -1,17 +1,15 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from './components/navbar/navbar.component';
+import {FirstSectionComponent} from './components/first-section/first-section.component';
+import {NavbarComponent} from './components/layouts/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
+  imports: [RouterOutlet, FirstSectionComponent, NavbarComponent],
+  templateUrl: './app.component.html',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent],
-  template: `
-    <app-navbar></app-navbar>
-    <router-outlet></router-outlet>
-  `
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'frontEnd';
+  title = 'EasyOrder';
 }

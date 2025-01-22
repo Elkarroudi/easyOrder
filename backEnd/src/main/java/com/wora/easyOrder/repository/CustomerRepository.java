@@ -2,7 +2,9 @@ package com.wora.easyOrder.repository;
 
 import com.wora.easyOrder.dto.response.CustomerResponseDTO;
 import com.wora.easyOrder.entity.Customer;
-import com.wora.easyOrder.repository.base.UserRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface CustomerRepository extends UserRepository<Customer, CustomerResponseDTO> {
+@Repository
+public interface CustomerRepository extends JpaRepository<Customer, CustomerResponseDTO> {
 }

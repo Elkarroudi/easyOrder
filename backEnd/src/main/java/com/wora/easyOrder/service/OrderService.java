@@ -1,6 +1,6 @@
-package com.elkarroudi.easyOrder.service;
+package com.wora.easyOrder.service;
 
-import com.elkarroudi.easyOrder.model.Order;
+import com.wora.easyOrder.entity.Order;
 import java.time.LocalDateTime;
 import java.util.List;
 

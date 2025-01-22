@@ -1,8 +1,8 @@
-package com.elkarroudi.easyOrder.service.impl;
+package com.wora.easyOrder.service.implementation;
 
-import com.elkarroudi.easyOrder.model.Order;
-import com.elkarroudi.easyOrder.repository.OrderRepository;
-import com.elkarroudi.easyOrder.service.OrderService;
+import com.wora.easyOrder.entity.Order;
+import com.wora.easyOrder.repository.OrderRepository;
+import com.wora.easyOrder.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;

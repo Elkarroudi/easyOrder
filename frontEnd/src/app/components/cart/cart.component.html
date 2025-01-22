@@ -1,0 +1,95 @@
+<div class="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-red-800">Your Cart</h1>
+      <div class="flex gap-4">
+        <a href="#" class="text-gray-600">
+          <i class="fas fa-shopping-cart"></i>
+        </a>
+        <a href="#" class="text-gray-600">
+          <i class="fas fa-user"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Cart Items -->
+    <div class="space-y-4 mb-8">
+      @for (item of cart().items; track item.id) {
+        <div class="bg-white rounded-lg shadow-sm p-4 flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <img [src]="item.image" [alt]="item.name" 
+                 class="w-20 h-20 object-cover rounded-lg">
+            <div>
+              <h3 class="font-semibold text-lg">{{item.name}}</h3>
+              <p class="text-gray-600 text-sm">{{item.description}}</p>
+              <p class="font-semibold mt-1">{{item.price}}$</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 border rounded-full px-4 py-1">
+            <button (click)="updateQuantity(item, false)" 
+                    class="text-red-800 hover:text-red-600 focus:outline-none">
+              -
+            </button>
+            <span class="w-8 text-center">{{item.quantity}}</span>
+            <button (click)="updateQuantity(item, true)"
+                    class="text-red-800 hover:text-red-600 focus:outline-none">
+              +
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Delivery Options -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+      <div class="flex gap-6 mb-6">
+        <button (click)="toggleDeliveryMode(false)"
+                [class.bg-red-800]="!cart().isDelivery"
+                [class.text-white]="!cart().isDelivery"
+                class="flex-1 py-2 px-4 rounded-full border border-red-800 transition-colors">
+          In Restaurant
+        </button>
+        <button (click)="toggleDeliveryMode(true)"
+                [class.bg-red-800]="cart().isDelivery"
+                [class.text-white]="cart().isDelivery"
+                class="flex-1 py-2 px-4 rounded-full border border-red-800 transition-colors">
+          To be Delivered
+        </button>
+      </div>
+
+      @if (!cart().isDelivery) {
+        <div class="w-full">
+          <select class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-800"
+                  [(ngModel)]="cart().tableNumber">
+            <option value="">Select a table</option>
+            @for (table of tables; track table) {
+              <option [value]="table">Table {{table}}</option>
+            }
+          </select>
+        </div>
+      }
+
+      @if (cart().isDelivery) {
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h4 class="text-red-800 font-semibold mb-4">Your Delivery Person Is:</h4>
+          <div class="flex items-center gap-4">
+            <img [src]="deliveryPerson.image" [alt]="deliveryPerson.name"
+                 class="w-16 h-16 rounded-full object-cover">
+            <div>
+              <p class="font-semibold">{{deliveryPerson.name}}</p>
+              <p class="text-gray-600">{{deliveryPerson.phone}}</p>
+              <p class="text-gray-600 text-sm">{{deliveryPerson.email}}</p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Checkout Button -->
+    <button (click)="checkout()"
+            class="w-full bg-red-800 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+      Checkout : {{cart().totalAmount}}$
+    </button>
+  </div>
+</div>

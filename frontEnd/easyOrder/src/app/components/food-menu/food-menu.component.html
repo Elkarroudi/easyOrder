@@ -3,16 +3,23 @@
     <div *ngFor="let dish of dishes"
          class="rounded-lg overflow-hidden shadow-md bg-white"
          [class.opacity-50]="!dish.available">
-      <img [alt]="dish.name" [src]="'../../assets/images' + dish.image" class="w-full h-48 object-cover">
+      <img [alt]="dish.name"
+           [class]="dish.available ? 'w-full h-48 object-cover' : 'w-full h-48 object-cover grayscale opacity-50'"
+           [src]="'../../assets/images' + dish.image">
+
       <div class="p-4">
         <div class="flex justify-between items-center mb-2">
           <h3 class="font-medium">{{dish.name}}</h3>
           <span class="text-sm">{{dish.price}}$</span>
         </div>
-
-        <div class="flex text-yellow-400 mb-2">
-          <span *ngFor="let star of [].constructor(dish.rating)">★</span>
+        <div class="flex mb-2">
+  <span
+    *ngFor="let star of [0, 1, 2, 3, 4]; let i = index"
+    [ngClass]="{'text-yellow-400': i < (dish.rating || 0), 'text-gray-400': i >= (dish.rating || 0)}">
+    ★
+  </span>
         </div>
+
 
         <div class="flex justify-center">
           <div *ngIf="cartItems[dish.id]"

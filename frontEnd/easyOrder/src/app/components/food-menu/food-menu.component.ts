@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import {Component, inject, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {HttpClient} from '@angular/common/http';
 import {Dish} from '../../models/dish.model';
 
 @Component({
@@ -22,7 +22,9 @@ export class FoodMenuComponent implements OnInit {
 
   fetchDishes(): void {
     this.http.get<Dish[]>('http://localhost:8085/api/dishes').subscribe(data => {
-      console.log("dishes are " , data)
+      console.log("Full data response: ", data);
+
+      console.log("rating is ", data.map(dish => dish.rating));
       this.dishes = data;
     });
   }

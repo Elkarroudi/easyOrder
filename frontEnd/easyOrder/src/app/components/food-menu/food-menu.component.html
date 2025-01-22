@@ -3,10 +3,7 @@
     <div *ngFor="let dish of dishes"
          class="rounded-lg overflow-hidden shadow-md bg-white"
          [class.opacity-50]="!dish.available">
-      <img [src]="dish.image || 'assets/images/beef.npg'"
-           [alt]="dish.name"
-           class="w-full h-48 object-cover">
-
+      <img [alt]="dish.name" [src]="'../../assets/images' + dish.image" class="w-full h-48 object-cover">
       <div class="p-4">
         <div class="flex justify-between items-center mb-2">
           <h3 class="font-medium">{{dish.name}}</h3>
@@ -42,6 +39,7 @@
   </div>
 
   <div class="fixed bottom-0 left-0 right-0 bg-red-700 text-white p-4 text-center text-lg">
-    Your total is: {{total}}$
+    Your total is: {{ total | number:'1.2-2' }}$
   </div>
+
 </div>

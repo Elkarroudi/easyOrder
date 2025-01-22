@@ -1,6 +1,6 @@
-package com.elkarroudi.easyOrder.repository;
+package com.wora.easyOrder.repository;
 
-import com.elkarroudi.easyOrder.model.Order;
+import com.wora.easyOrder.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;

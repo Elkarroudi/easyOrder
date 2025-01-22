@@ -1,10 +1,7 @@
-package com.wora.easyOrder.service.contract;
-
+package com.wora.easyOrder.service;
 
 import com.wora.easyOrder.dto.response.DishResponseDto;
-import java.util.List;
 import com.wora.easyOrder.dto.request.DishRequestDto;
-
 import java.util.List;
 
 public interface DishService {
@@ -14,5 +11,3 @@ public interface DishService {
     DishResponseDto update(Long id, DishRequestDto dishRequestDto);
     void delete(Long id);
 }
-
-

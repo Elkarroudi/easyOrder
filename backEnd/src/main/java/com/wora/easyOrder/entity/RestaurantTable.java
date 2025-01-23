@@ -15,11 +15,9 @@ public class RestaurantTable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @Positive
     private Integer number;
 
-    @NotNull
     @Min(1)
     private Integer capacity;
 
@@ -27,7 +25,7 @@ public class RestaurantTable {
     @Enumerated(EnumType.STRING)
     private TableStatus status;
 
-    @NotBlank
+
     @Size(max = 100)
     private String location;
 

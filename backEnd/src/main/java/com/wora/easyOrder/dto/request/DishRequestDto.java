@@ -26,4 +26,5 @@ public class DishRequestDto {
 
     @NotNull
     private Long categoryId;
+    private Integer rating;
 }

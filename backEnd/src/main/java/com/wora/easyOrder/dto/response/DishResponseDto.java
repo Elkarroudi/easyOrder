@@ -11,5 +11,6 @@ public class DishResponseDto {
     private String image;
     private Boolean available;
     private String categoryName;
+    private Integer rating;
 }
 

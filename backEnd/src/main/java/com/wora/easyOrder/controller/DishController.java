@@ -4,6 +4,9 @@ import com.wora.easyOrder.dto.request.DishRequestDto;
 import com.wora.easyOrder.dto.response.DishResponseDto;
 import com.wora.easyOrder.service.contract.DishService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,10 +34,14 @@ public class DishController {
 
 
     @GetMapping
-    public ResponseEntity<List<DishResponseDto>> getAllDishes() {
-        List<DishResponseDto> dishes = dishService.getAll();
+    public ResponseEntity<Page<DishResponseDto>> getAllDishes(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<DishResponseDto> dishes = dishService.getAll(pageable);
         return ResponseEntity.ok(dishes);
     }
+
 
 
     @PutMapping("/{id}")

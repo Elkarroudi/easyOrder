@@ -9,10 +9,9 @@ import com.wora.easyOrder.repository.CategoryRepository;
 import com.wora.easyOrder.repository.DishRepository;
 import com.wora.easyOrder.service.contract.DishService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -41,10 +40,9 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public List<DishResponseDto> getAll() {
-        return dishRepository.findAll().stream()
-                .map(dishMapper::toDto)
-                .collect(Collectors.toList());
+    public Page<DishResponseDto> getAll(Pageable pageable) {
+        return dishRepository.findAll(pageable)
+                .map(dishMapper::toDto);
     }
 
     @Override

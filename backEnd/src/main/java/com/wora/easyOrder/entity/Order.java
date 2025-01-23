@@ -43,6 +43,4 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id")
     private RestaurantTable table;
-    private Integer rating ;
-
 }

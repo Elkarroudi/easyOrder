@@ -25,6 +25,7 @@ export class CategoriesComponent implements OnInit {
   loadCategories() {
     this.categoryService.getAllCategories().subscribe({
       next: (categories) => {
+
         console.log('Categories loaded:', categories);
         this.categories = categories;
       },

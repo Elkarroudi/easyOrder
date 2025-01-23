@@ -1,19 +1,30 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { Store } from '@ngrx/store';
+import { Actions } from '@ngrx/effects';
+import { Observable, Subscription } from 'rxjs';
+
 import { Dish } from '../../models/dish.model';
+import { Category } from '../../models/category.model';
+import { selectFilteredDishes, selectSelectedCategory } from '../../store/selectors/dish.selectors';
+import { loadDishes, setSelectedCategory } from '../../store/actions/dish.actions';
 
 @Component({
   selector: 'app-food-menu',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './food-menu.component.html',
+  templateUrl: './food-menu.component.html'
 })
-export class FoodMenuComponent implements OnInit {
-  private http = inject(HttpClient);
+export class FoodMenuComponent implements OnInit, OnDestroy {
+  private store = inject(Store);
+  private actions$ = inject(Actions);
+  private subscription = new Subscription();
 
-  currentPage = 0;
+  dishes$: Observable<Dish[]> = this.store.select(selectFilteredDishes);
+  selectedCategory$: Observable<Category | null> = this.store.select(selectSelectedCategory);
+
   dishes: Dish[] = [];
+  currentPage = 0;
   paginatedDishes: Dish[] = [];
   cartItems: { [key: number]: number } = {};
   total = 0;
@@ -21,29 +32,27 @@ export class FoodMenuComponent implements OnInit {
   totalPages = 0;
 
   ngOnInit(): void {
-    this.fetchDishes();
+    this.store.dispatch(loadDishes());
+
+    this.subscription.add(
+      this.dishes$.subscribe(dishes => {
+        this.dishes = dishes;
+        this.updatePaginatedDishes();
+      })
+    );
   }
 
-  fetchDishes(): void {
-    this.http.get<Dish[]>('http://localhost:8085/api/dishes').subscribe(data => {
-      console.log("dishes are", data)
-      this.dishes = data;
-      this.totalPages = Math.ceil(this.dishes.length / this.itemsPerPage);
-      this.updatePaginatedDishes();
-    });
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
-  updatePaginatedDishes(): void {
-    const start = this.currentPage * this.itemsPerPage;
-    const end = start + this.itemsPerPage;
-    this.paginatedDishes = this.dishes.slice(start, end);
+  onCategorySelect(category: Category | null): void {
+    this.store.dispatch(setSelectedCategory({ category }));
   }
 
   goToPage(page: number): void {
-    if (page >= 0 && page < this.totalPages) {
-      this.currentPage = page;
-      this.updatePaginatedDishes();
-    }
+    this.currentPage = page;
+    this.updatePaginatedDishes();
   }
 
   prevPage(): void {
@@ -73,6 +82,12 @@ export class FoodMenuComponent implements OnInit {
     this.calculateTotal();
   }
 
+  private updatePaginatedDishes(): void {
+    const start = this.currentPage * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    this.paginatedDishes = this.dishes.slice(start, end);
+  }
+
   private calculateTotal(): void {
     this.total = Object.entries(this.cartItems).reduce(
       (sum, [id, quantity]) =>
@@ -81,4 +96,3 @@ export class FoodMenuComponent implements OnInit {
     );
   }
 }
-

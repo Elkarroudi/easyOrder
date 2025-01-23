@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {RouterOutlet} from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import {FirstSectionComponent} from './components/first-section/first-section.component';
 import {NavbarComponent} from './components/layouts/navbar/navbar.component';
 import {FoodMenuComponent} from './components/food-menu/food-menu.component';

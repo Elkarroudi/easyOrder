@@ -37,7 +37,7 @@ public class Dish {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
-
+   private Integer rating;
     @OneToMany(mappedBy = "dish")
     private List<OrderItem> orderItems = new ArrayList<>();
 }

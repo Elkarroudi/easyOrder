@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-01-22T14:58:48+0100",
+    date = "2025-01-23T09:30:04+0100",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.2 (Oracle Corporation)"
 )
 @Component
@@ -28,6 +28,7 @@ public class DishMapperImpl implements DishMapper {
         dish.setPrice( dishRequestDto.getPrice() );
         dish.setImage( dishRequestDto.getImage() );
         dish.setAvailable( dishRequestDto.getAvailable() );
+        dish.setRating( dishRequestDto.getRating() );
 
         return dish;
     }
@@ -47,6 +48,7 @@ public class DishMapperImpl implements DishMapper {
         dishResponseDto.setPrice( dish.getPrice() );
         dishResponseDto.setImage( dish.getImage() );
         dishResponseDto.setAvailable( dish.getAvailable() );
+        dishResponseDto.setRating( dish.getRating() );
 
         return dishResponseDto;
     }

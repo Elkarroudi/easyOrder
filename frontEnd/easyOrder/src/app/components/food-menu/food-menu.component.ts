@@ -26,6 +26,7 @@ export class FoodMenuComponent implements OnInit {
 
   fetchDishes(): void {
     this.http.get<Dish[]>('http://localhost:8085/api/dishes').subscribe(data => {
+      console.log("dishes are", data)
       this.dishes = data;
       this.totalPages = Math.ceil(this.dishes.length / this.itemsPerPage);
       this.updatePaginatedDishes();

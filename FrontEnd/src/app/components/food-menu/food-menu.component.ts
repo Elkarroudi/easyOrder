@@ -1,7 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Store } from '@ngrx/store';
 import { Dish } from '../../models/dish.model';
+import * as CartActions from '../../store/cart/cart.actions';
 
 @Component({
   selector: 'app-food-menu',
@@ -11,12 +13,11 @@ import { Dish } from '../../models/dish.model';
 })
 export class FoodMenuComponent implements OnInit {
   private http = inject(HttpClient);
+  private store = inject(Store);
 
   currentPage = 0;
   dishes: Dish[] = [];
   paginatedDishes: Dish[] = [];
-  cartItems: { [key: number]: number } = {};
-  total = 0;
   itemsPerPage = 8;
   totalPages = 0;
 
@@ -60,25 +61,7 @@ export class FoodMenuComponent implements OnInit {
     }
   }
 
-  updateQuantity(id: number, delta: number): void {
-    const currentQty = this.cartItems[id] || 0;
-    const newQty = currentQty + delta;
-
-    if (newQty <= 0) {
-      delete this.cartItems[id];
-    } else {
-      this.cartItems[id] = newQty;
-    }
-
-    this.calculateTotal();
-  }
-
-  private calculateTotal(): void {
-    this.total = Object.entries(this.cartItems).reduce(
-      (sum, [id, quantity]) =>
-        sum + quantity * (this.dishes.find(d => d.id === +id)?.price || 0),
-      0
-    );
+  addToCart(dish: Dish): void {
+    this.store.dispatch(CartActions.addToCart({ dish }));
   }
 }
-

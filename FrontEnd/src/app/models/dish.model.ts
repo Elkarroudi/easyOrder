@@ -4,7 +4,7 @@ export interface Dish {
   description: string;
   price: number;
   image: string;
-  available: boolean;
-  categoryId: number;
+  category: string;
   rating: number;
+  available: boolean;
 }

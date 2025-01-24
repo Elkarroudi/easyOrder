@@ -7,12 +7,16 @@ import { Order } from '../models/order.model';
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = 'http://localhost:8085/api/orders';
+  private apiUrl = 'http://localhost:8080/api/orders';
 
   constructor(private http: HttpClient) {}
 
-  createOrder(order: Omit<Order, 'id' | 'status' | 'createdAt'>): Observable<Order> {
+  createOrder(order: Order): Observable<Order> {
     return this.http.post<Order>(this.apiUrl, order);
+  }
+
+  getOrder(orderId: number): Observable<Order> {
+    return this.http.get<Order>(`${this.apiUrl}/${orderId}`);
   }
 
   getOrderById(id: number): Observable<Order> {

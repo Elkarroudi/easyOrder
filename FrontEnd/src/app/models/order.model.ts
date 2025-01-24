@@ -1,20 +1,16 @@
-import { CartItem } from './cart.model';
+import { Dish } from './dish.model';
+
+export interface OrderItem {
+  dish: Dish;
+  quantity: number;
+}
 
 export interface Order {
   id?: number;
-  items: CartItem[];
+  items: OrderItem[];
   total: number;
   tableNumber?: string;
   isDelivery: boolean;
-  status: OrderStatus;
-  createdAt: Date;
-  deliveryPersonId?: number;
-}
-
-export enum OrderStatus {
-  PENDING = 'PENDING',
-  PREPARING = 'PREPARING',
-  READY = 'READY',
-  DELIVERED = 'DELIVERED',
-  COMPLETED = 'COMPLETED'
+  status?: 'PENDING' | 'PREPARING' | 'READY' | 'DELIVERED';
+  createdAt?: Date;
 }

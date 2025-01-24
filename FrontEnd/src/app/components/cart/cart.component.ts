@@ -105,4 +105,8 @@ export class CartComponent implements OnInit {
       });
     });
   }
+
+  removeFromCart(dishId: number): void {
+    this.store.dispatch(CartActions.removeFromCart({ dishId }));
+  }
 }

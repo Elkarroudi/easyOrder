@@ -1,11 +1,22 @@
 <div class="w-full flex justify-center mt-8">
   <div class="inline-flex flex-wrap justify-center gap-4">
     <button
+      (click)="filterDishes(null)"
+      class="px-6 py-3 bg-[#C84C30] text-gray-600 rounded-lg shadow-md
+             hover:bg-red-700 hover:text-white
+             transition-colors duration-300 ease-in-out"
+      [class.bg-[#C84C30]="!selectedCategory"
+      [class.text-white]="!selectedCategory">
+      All Dishes
+    </button>
+    <button
       *ngFor="let category of categories"
       (click)="filterDishes(category)"
       class="px-6 py-3 bg-white text-gray-600 rounded-lg shadow-md
-                 hover:bg-pink-500 hover:text-white
-                 transition-colors duration-300 ease-in-out">
+             hover:bg-red-700 hover:text-white
+             transition-colors duration-300 ease-in-out"
+      [class.bg-pink-500]="selectedCategory?.id === category.id"
+      [class.text-white]="selectedCategory?.id === category.id">
       {{ category.name }}
     </button>
   </div>

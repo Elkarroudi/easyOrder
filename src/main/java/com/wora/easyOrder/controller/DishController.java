@@ -51,4 +51,15 @@ public class DishController {
         dishService.delete(id);
         return ResponseEntity.ok("Dish with ID " + id + " was deleted successfully.");
     }
+    @GetMapping("/by-category/{categoryId}")
+    public ResponseEntity<List<DishResponseDto>> getDishesbyCategory(@PathVariable Long categoryId) {
+        List<DishResponseDto> dishes = dishService.getDishesByCategory(categoryId);
+        return ResponseEntity.ok(dishes);
+    }
+
+    @GetMapping("/by-category-name")
+    public ResponseEntity<List<DishResponseDto>> getDishesByCategoryName(@RequestParam String categoryName) {
+        List<DishResponseDto> dishes = dishService.getDishessByCategoryName(categoryName);
+        return ResponseEntity.ok(dishes);
+    }
 }

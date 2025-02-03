@@ -1,8 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { Dish } from '../../models/dish.model';
+import { DishService } from '../../services/dish.service';
+import { CategoryService } from '../../services/category.service';
 import * as CartActions from '../../store/cart/cart.actions';
 
 @Component({
@@ -10,8 +13,9 @@ import * as CartActions from '../../store/cart/cart.actions';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './food-menu.component.html',
+  styleUrls: ['./food-menu.component.css']
 })
-export class FoodMenuComponent implements OnInit {
+export class FoodMenuComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
   private store = inject(Store);
 
@@ -20,18 +24,59 @@ export class FoodMenuComponent implements OnInit {
   paginatedDishes: Dish[] = [];
   itemsPerPage = 8;
   totalPages = 0;
+  private categorySubscription?: Subscription;
+
+  constructor(
+    private dishService: DishService,
+    private categoryService: CategoryService
+  ) {}
 
   ngOnInit(): void {
-    this.fetchDishes();
+    this.loadAllDishes();
+
+    // Subscribe to category changes
+    this.categorySubscription = this.categoryService.selectedCategory$
+      .subscribe(category => {
+        if (category) {
+          this.loadDishesByCategory(category.id);
+        } else {
+          this.loadAllDishes();
+        }
+      });
   }
 
-  fetchDishes(): void {
-    this.http.get<Dish[]>('http://localhost:8085/api/dishes').subscribe(data => {
-      console.log("dishes are", data)
-      this.dishes = data;
-      this.totalPages = Math.ceil(this.dishes.length / this.itemsPerPage);
-      this.updatePaginatedDishes();
+  ngOnDestroy(): void {
+    this.categorySubscription?.unsubscribe();
+  }
+
+  loadAllDishes(): void {
+    this.dishService.getAllDishes().subscribe({
+      next: (dishes) => {
+        this.dishes = dishes;
+        this.updatePagination();
+      },
+      error: (error) => {
+        console.error('Error loading dishes:', error);
+      }
     });
+  }
+
+  loadDishesByCategory(categoryId: number): void {
+    this.dishService.getDishesByCategory(categoryId).subscribe({
+      next: (dishes) => {
+        this.dishes = dishes;
+        this.currentPage = 0; // Reset to first page when changing category
+        this.updatePagination();
+      },
+      error: (error) => {
+        console.error('Error loading dishes by category:', error);
+      }
+    });
+  }
+
+  private updatePagination(): void {
+    this.totalPages = Math.ceil(this.dishes.length / this.itemsPerPage);
+    this.updatePaginatedDishes();
   }
 
   updatePaginatedDishes(): void {

@@ -1,42 +1,46 @@
-import {Component, OnInit} from '@angular/core';
-import {CategoryResponseDTO, CategoryService} from '../../services/category.service';
-import {CommonModule} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { CategoryResponseDTO, CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-categories',
-  imports: [
-    CommonModule,
-    HttpClientModule
-  ],  templateUrl: './categories.component.html',
   standalone: true,
-  styleUrl: './categories.component.css'
+  imports: [CommonModule],
+  templateUrl: './categories.component.html',
+  styleUrls: ['./categories.component.css']
 })
-export class CategoriesComponent implements OnInit {
+export class CategoriesComponent implements OnInit, OnDestroy {
   categories: CategoryResponseDTO[] = [];
   selectedCategory: CategoryResponseDTO | null = null;
+  private categorySubscription?: Subscription;
 
   constructor(private categoryService: CategoryService) {}
 
   ngOnInit() {
     this.loadCategories();
+    this.categorySubscription = this.categoryService.selectedCategory$
+      .subscribe(category => {
+        this.selectedCategory = category;
+      });
+  }
+
+  ngOnDestroy() {
+    this.categorySubscription?.unsubscribe();
   }
 
   loadCategories() {
     this.categoryService.getAllCategories().subscribe({
       next: (categories) => {
-        console.log('Categories loaded:', categories);
         this.categories = categories;
       },
       error: (error) => {
-        console.error('Error loading categories', error);
+        console.error('Error loading categories:', error);
       }
     });
   }
 
-  filterDishes(category: CategoryResponseDTO) {
-    this.selectedCategory = category;
+  filterDishes(category: CategoryResponseDTO | null) {
+    this.categoryService.setSelectedCategory(category);
   }
 }
-
-

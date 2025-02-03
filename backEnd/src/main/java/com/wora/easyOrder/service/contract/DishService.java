@@ -13,6 +13,8 @@ public interface DishService {
     List<DishResponseDto> getAll();
     DishResponseDto update(Long id, DishRequestDto dishRequestDto);
     void delete(Long id);
+    List<DishResponseDto> getDishesByCategory(Long categoryId);
+    List<DishResponseDto> getDishessByCategoryName(String categoryName);
 }
 
 

@@ -72,4 +72,19 @@ public class DishServiceImpl implements DishService {
                 .orElseThrow(() -> new RuntimeException("Dish not found with id: " + id));
         dishRepository.delete(dish);
     }
+     @Override
+    public List<DishResponseDto> getDishesByCategory(Long categoryId) {
+        List<Dish> dishes = dishRepository.findByCategory_Id(categoryId);
+        return dishes.stream()
+                .map(dishMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DishResponseDto> getDishessByCategoryName(String categoryName) {
+        List<Dish> dishes = dishRepository.findByCategory_Name(categoryName);
+        return dishes.stream()
+                .map(dishMapper::toDto)
+                .collect(Collectors.toList());
+    }
 }
